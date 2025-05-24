@@ -39,17 +39,17 @@ export default function SignIn() {
     const password = formData.get('password');
 
     try {
-      // Use the simpified auth setup
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         email,
         password,
         redirect: true,
         callbackUrl: '/dashboard',
       });
-      
-      // Since we're using redirect: true, this code will only run if there was an error
-      // and the redirect didn't happen
-      setError('Authentication failed');
+
+      // If we get here, it means the sign in failed
+      if (result?.error) {
+        setError(result.error);
+      }
     } catch (error) {
       console.error('Sign in error:', error);
       setError('An error occurred during sign in. Please try again.');
